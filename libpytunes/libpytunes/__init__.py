@@ -1,1 +1,1 @@
-from MusicProject.libpytunes.libpytunes.Library import Library
+from libpytunes.libpytunes.Library import Library

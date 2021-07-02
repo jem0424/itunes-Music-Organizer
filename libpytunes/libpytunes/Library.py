@@ -4,8 +4,8 @@ from six import PY2
 from six.moves.urllib import parse as urlparse
 import time
 
-from MusicProject.libpytunes.libpytunes.Song import Song
-from MusicProject.libpytunes.libpytunes.Playlist import Playlist
+from libpytunes.libpytunes.Song import Song
+from libpytunes.libpytunes.Playlist import Playlist
 
 
 logger = logging.getLogger(__name__)
