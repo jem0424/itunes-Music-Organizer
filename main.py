@@ -3,32 +3,46 @@ from itunesLibrary import library
 
 if __name__ == '__main__':
 
-    path = os.path.join(os.getenv("HOME"), "Music/iTunes/iTunes Music Library.xml")
+    path = os.path.join(os.getenv("HOME"), "Music/iTunes/iTunes Media/Library.xml")
 
     # must first parse...
     lib = library.parse(path)
 
-    print(len(lib))  # number of items stored
-
+    # print(len(lib))  # number of items stored
+    songs = set()
     for playlist in lib.playlists:
-        for item in playlist.items:
-            print(item)  # perform function on each item in the playlist
-
+        if playlist.title not in ["Library", "Downloaded", "Music"]:
+            for item in playlist.items:
+                songs.add(item)
+                # print(item)  # perform function on each item in the playlist
+    songs = list(songs)
     # get a single playlist
-    playlist = lib.getPlaylist("Gray")
+    unorganized_tracks = []
+    organized_tracks = [song.title for song in songs]
+    for item in lib.items:
+        if item.title not in organized_tracks:
+            unorganized_tracks.append(item.title)
 
-    # check the playlist type
-    assert (not playlist.is_smart())
-    assert (not playlist.is_folder())
+    lib.addPlaylist("Unorganized tracks")
+    a
+        for track in unorganized_tracks:
+            file.write()
+    # print(unorganized_tracks)
 
-    # get a list of all of the David Bowie songs
-    bowie_items = lib.getItemsForArtist("David Bowie")
-
-    # get a single song
-    single_song = lib.getItemsById("16116")
-
-    # get the iTunes application version
-    print(lib.applicationVersion)
+    # playlist = lib.getPlaylist("Gray")
+    #
+    # # check the playlist type
+    # assert (not playlist.is_smart())
+    # assert (not playlist.is_folder())
+    #
+    # # get a list of all of the David Bowie songs
+    # bowie_items = lib.getItemsForArtist("David Bowie")
+    #
+    # # get a single song
+    # single_song = lib.getItemsById("16116")
+    #
+    # # get the iTunes application version
+    # print(lib.applicationVersion)
     # print(count)
     # print(f"Enter Token: {argv[1]}")
     # spotify= SpotifyClient(argv[1])
