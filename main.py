@@ -1,32 +1,41 @@
 import os
 from itunesLibrary import library
 
-if __name__ == '__main__':
 
+def load_itunes_library():
     path = os.path.join(os.getenv("HOME"), "Music/iTunes/iTunes Media/Library.xml")
+    return library.parse(path)
 
-    # must first parse...
-    lib = library.parse(path)
 
-    # print(len(lib))  # number of items stored
+def get_songs_that_live_in_playlists(lib):
     songs = set()
     for playlist in lib.playlists:
         if playlist.title not in ["Library", "Downloaded", "Music"]:
             for item in playlist.items:
                 songs.add(item)
-                # print(item)  # perform function on each item in the playlist
-    songs = list(songs)
-    # get a single playlist
-    unorganized_tracks = []
-    organized_tracks = [song.title for song in songs]
-    for item in lib.items:
-        if item.title not in organized_tracks:
-            unorganized_tracks.append(item.title)
+    return list(songs)
 
-    lib.addPlaylist("Unorganized tracks")
-    a
-        for track in unorganized_tracks:
-            file.write()
+
+def write(list):
+    with open("Unused_Tracks_.txt", "w") as file:
+        for track in list:
+            file.write(track + "\n")
+
+
+if __name__ == '__main__':
+    lib = load_itunes_library()
+
+    songs = get_songs_that_live_in_playlists(lib)
+    organized_tracks = [song.title for song in songs]
+
+    unorganized_tracks = [item.title for item in lib.items if item.title not in organized_tracks]
+
+    write(unorganized_tracks)
+
+
+
+    # lib.addPlaylist("Unorganized tracks")
+
     # print(unorganized_tracks)
 
     # playlist = lib.getPlaylist("Gray")
