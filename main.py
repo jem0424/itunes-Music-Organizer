@@ -1,105 +1,27 @@
-import os
-from itunesLibrary import library
+from modules.my_library import MyLibrary
 
 
-def load_itunes_library():
-    path = os.path.join(os.getenv("HOME"), "Music/iTunes/iTunes Media/Library.xml")
-    return library.parse(path)
-
-
-def get_songs_that_live_in_playlists(lib):
-    songs = set()
-    for playlist in lib.playlists:
-        if playlist.title not in ["Library", "Downloaded", "Music"]:
-            for item in playlist.items:
-                songs.add(item)
-    return list(songs)
-
-
-def write(list):
-    with open("Unused_Tracks_.txt", "w") as file:
+def write_songs_to_file(list):
+    with open("Unused_Tracks_1.txt", "w") as file:
         for track in list:
-            file.write(track + "\n")
+            file.write(f"{track.name} {track.artist}\n")
+
+
+
+# def comments(file):
+#     audiofile = load("file:///Users/joelmunoz/Music/Music/Media.localized/Music/Dog%20Blood/Unknown%20Album/Middle%20Finger%202%20Vip.mp3")
+#     print(f"# comments: {len(audiofile.tag.comments)}")
+#     for comment in audiofile.tag.comments:
+#         # Show comment
+#         print(comment.description)
+#         print(comment.text)
+#         print(comment.lang)
 
 
 if __name__ == '__main__':
-    lib = load_itunes_library()
-
-    songs = get_songs_that_live_in_playlists(lib)
-    organized_tracks = [song.title for song in songs]
-
-    unorganized_tracks = [item.title for item in lib.items if item.title not in organized_tracks]
-
-    write(unorganized_tracks)
+    library = MyLibrary()
+    tracks_not_in_playlists = library.find_songs_not_in_playlists()
+    write_songs_to_file(tracks_not_in_playlists)
+    # a = [song.comments() for song in songs_found_in_playlists]
 
 
-
-    # lib.addPlaylist("Unorganized tracks")
-
-    # print(unorganized_tracks)
-
-    # playlist = lib.getPlaylist("Gray")
-    #
-    # # check the playlist type
-    # assert (not playlist.is_smart())
-    # assert (not playlist.is_folder())
-    #
-    # # get a list of all of the David Bowie songs
-    # bowie_items = lib.getItemsForArtist("David Bowie")
-    #
-    # # get a single song
-    # single_song = lib.getItemsById("16116")
-    #
-    # # get the iTunes application version
-    # print(lib.applicationVersion)
-    # print(count)
-    # print(f"Enter Token: {argv[1]}")
-    # spotify= SpotifyClient(argv[1])
-    # spotify.check_profile()
-    # spotify.get_liked_tracks()
-
-#     trackID=trackrow.text
-#     props = trackrow.findall('*')
-#     #name = trackrow.find('string').text
-#     fields = trackrow.findall('key')
-#     name = fields[1].text
-#     trackname = trackrow.findall('string')[0].text
-#     artist = fields[2].text
-#     artisttext = trackrow.findall('string')[1].text
-#     album = fields[3].text
-#     albumtext = trackrow.findall('string')[2].text
-#     genre = fields[4].text
-#     genretext = trackrow.findall('string')[3].text
-#     filetype= fields[5].text
-#     filetypetext = trackrow.findall('string')[4].text
-#     size = fields[6].text
-#     sizenum = trackrow.findall('integer')[1].text
-#     time = fields[7].text
-#     tracktime = trackrow.findall('integer')[2].text
-#     year = fields[8].text
-#     trackyear = trackrow.findall('integer')[3].text
-#     bpmfield = fields[9].text
-#     bpm = trackrow.findall('integer')[4].text
-#     datemodfield = fields[10].text
-#     datemod = trackrow.findall('date')[0].text
-#     dateaddfield = fields[11].text
-#     dateadd = trackrow.findall('date')[1].text
-#     bitratefield = fields[12].text
-#     bitrate = trackrow.findall('integer')[5].text
-#     commentfield = fields[14].text
-#     comments = trackrow.findall('string')[5].text
-#     #unplayedfield = fields[21].text
-#     #unplayedflag =
-#     locationfield = fields[22].text
-#     location = trackrow.findall('string')[9].text
-#     filefoldercount = fields[23].text
-#     ffcount = trackrow.findall('integer')[9].text
-#
-#     #This will find text for the
-#     print(ffcount)
-#
-"""     vclient = MongoClient('localhost',27017)
-        db=vclient.myDB
-        result = db.data.insert_one({name:trackTitle})
-        print (result.inserted_id) 
-"""
