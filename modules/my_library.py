@@ -9,7 +9,7 @@ from modules.MySong import MySong
 class MyLibrary(object):
 
     def __init__(self):
-        self.library = self.load_itunes_library()
+        self.music = self.load_itunes_library()
         self.custom_playlists = self.get_custom_playlists()
 
     @staticmethod
@@ -18,7 +18,7 @@ class MyLibrary(object):
         return parse(path)
 
     def get_custom_playlists(self):
-        playlists = [p for p in self.library.playlists if p.is_regular() is True]
+        playlists = [p for p in self.music.playlists if p.is_regular() is True]
         return playlists
 
     def get_playlist_by_track(self, track_id):
@@ -29,7 +29,7 @@ class MyLibrary(object):
                 matched_playlist.append(playlist.title)
         return matched_playlist
 
-    def get_tracks_that_live_in_playlists(self):
+    def get_tracks_in_current_playlists(self):
         songs = set()
         for playlist in self.custom_playlists:
             for item in playlist.items:
@@ -37,20 +37,13 @@ class MyLibrary(object):
         return list(songs)
 
     def find_songs_not_in_playlists(self):
-        tracks_in_playlists = [MySong(Artist=song.artist,
-                                      Name=song.title,
-                                      # Comments=song.itunesAttributes["Comments"],
-                                      Track_ID=song.itunesAttributes["Track ID"],
-                                      playlists=self.get_playlist_by_track(song.itunesAttributes['Track ID'],
-                                                                              )
-                                      ) for song in self.get_tracks_that_live_in_playlists()]
-        track_ids_in_playlists = [track.track_id for track in tracks_in_playlists]
+        track_ids_in_playlists = [track.itunesAttributes['Track ID'] for track in self.get_tracks_in_current_playlists()]
         tracks_not_in_playlists = [MySong(Artist=item.artist,
-                                      Name=item.title,
-                                      # Comments=song.itunesAttributes["Comments"],
-                                      Track_ID=item.itunesAttributes["Track ID"],
-                                      playlists=self.get_playlist_by_track(item.itunesAttributes['Track ID'],
-                                                                              )
-                                      ) for item in self.library.items
+                                          Name=item.title,
+                                          Track_ID=item.itunesAttributes["Track ID"],
+                                          Location=item.getItunesAttribute("Location"),
+                                          playlists=self.get_playlist_by_track(item.itunesAttributes['Track ID'])
+                                          )
+                                   for item in self.music.items
                                    if item.itunesAttributes['Track ID'] not in track_ids_in_playlists]
         return tracks_not_in_playlists

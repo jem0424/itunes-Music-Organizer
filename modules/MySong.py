@@ -8,7 +8,7 @@ class MySong:
     def __init__(self, playlists=None, **kwargs, ):
         # self.attributes = attributes
         self.name = kwargs.get('Name', "")
-        self.artist = kwargs.get('Artist', "")
+        self.artist = kwargs.get('Artist', "N/A")
         self.track_id = kwargs.get('Track_ID', 0)
         # self.comments = kwargs.get('Comments', "")
         self.matching_playlists = playlists
@@ -39,5 +39,5 @@ class MySong:
         pass
 
     def __repr__(self):
-        return f"{self.attributes}"
+        return f"{self.name}, {self.artist}, {self.file_location}"
 
