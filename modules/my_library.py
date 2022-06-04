@@ -1,7 +1,7 @@
 from os import getenv
 from os.path import join
 
-from itunesLibrary.library import parse
+from itunesLibrary.library import parse, Library
 
 from modules.MySong import MySong
 
@@ -38,12 +38,18 @@ class MyLibrary(object):
 
     def find_songs_not_in_playlists(self):
         track_ids_in_playlists = [track.itunesAttributes['Track ID'] for track in self.get_tracks_in_current_playlists()]
-        tracks_not_in_playlists = [MySong(Artist=item.artist,
-                                          Name=item.title,
-                                          Track_ID=item.itunesAttributes["Track ID"],
-                                          Location=item.getItunesAttribute("Location"),
-                                          playlists=self.get_playlist_by_track(item.itunesAttributes['Track ID'])
-                                          )
+        tracks_not_in_playlists = [MySong(item.itunesAttributes)
                                    for item in self.music.items
                                    if item.itunesAttributes['Track ID'] not in track_ids_in_playlists]
         return tracks_not_in_playlists
+
+    def export_songs_not_in_playlists(self):
+        track_ids_in_playlists = [track.itunesAttributes['Track ID'] for track in self.get_tracks_in_current_playlists()]
+        tracks_not_in_playlists = [MySong(item)
+                                   for item in self.music.items
+                                   if item.itunesAttributes['Track ID'] not in track_ids_in_playlists]
+        return tracks_not_in_playlists
+
+class TestMyLibrary(Library):
+    def __init__(self, ignoreRemoteSongs):
+        super().__init__(ignoreRemoteSongs)
